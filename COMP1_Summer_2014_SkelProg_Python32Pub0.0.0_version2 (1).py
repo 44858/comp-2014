@@ -78,7 +78,7 @@ def DisplayMenu():
 def GetMenuChoice():
   Choice = input()
   print()
-  return Choice
+  return Choice.lower()[0]
 
 def LoadDeck(Deck):
   CurrentFile = open('deck.txt', 'r')
@@ -138,7 +138,7 @@ def GetPlayerName():
 
 def GetChoiceFromUser():
   Choice = input('Do you think the next card will be higher than the last card (enter y or n)? ')
-  return Choice
+  return Choice.lower()[0]
 
 def DisplayEndOfGameMessage(Score):
   print()
@@ -158,14 +158,20 @@ def ResetRecentScores(RecentScores):
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
     RecentScores[Count].Name = ''
     RecentScores[Count].Score = 0
+    RecentScores[Count].Date = None
 
 def DisplayRecentScores(RecentScores):
   print()
   print('Recent Scores: ')
   print()
+  print("{0:<12}{1:<10}{2:<5}".format("Date","Name","Score"))
+  print()
   for Count in range(1, NO_OF_RECENT_SCORES + 1):
-    print("Name    Score")
-    print(RecentScores[Count].Name, RecentScores[Count].Score)
+    if RecentScores[Count].Date != None:
+      DateOfScore = RecentScores[Count].Date.strftime("%d/%m/%Y")
+    else:
+       DateOfScore = "N/A"
+    print("{0:<12}{1:<10}{2:<5}".format(DateOfScore,RecentScores[Count].Name,RecentScores[Count].Score))
   print()
   print('Press the Enter key to return to the main menu')
   input()
@@ -187,6 +193,9 @@ def UpdateRecentScores(RecentScores, Score):
     Count = NO_OF_RECENT_SCORES
   RecentScores[Count].Name = PlayerName
   RecentScores[Count].Score = Score
+  RecentScores[Count].Date = date.today()
+
+
 
 def PlayGame(Deck, RecentScores):
   LastCard = TCard()
@@ -236,3 +245,4 @@ if __name__ == '__main__':
       DisplayRecentScores(RecentScores)
     elif Choice == '4':
       ResetRecentScores(RecentScores)
+
